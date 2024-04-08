@@ -5,5 +5,5 @@
     "rds_password": "uqUY4TXXGMAD9bvCtCIM",
     "rds_db": "COMPACT3",
     "server_host": "localhost",
-    "server_port": "8080"
+    "server_port": "9999"
 }
