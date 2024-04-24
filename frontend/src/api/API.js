@@ -14,6 +14,7 @@ async function getNameAndAliasByAuthorId(authorId) {
     return await axiosGet(`/authorNames/${authorId}`);
 }
 
+
 async function getTopAuthots(topN, criterion) {
     return await axiosGet(`/topAuthors`, { topN, criterion });
 }
@@ -24,6 +25,10 @@ async function getAuthorFields(authorId) {
 
 async function getAuthorCollaborators(authorId) {
     return await axiosGet(`/authorCollaborators/${authorId}`);
+}
+
+async function getAuthorPapers(authorId) {
+    return await axiosGet(`/authorPapers/${authorId}`);
 }
 
 async function getPaperbyId(paperId) {
@@ -106,10 +111,14 @@ async function getAverageCitationCountOfField(fieldId) {
     return await axiosGet(`/fieldAverageCitationCount/${fieldId}`);
 }
 
+async function getRelatedPaperByPaperId(paperId) {
+    return await axiosGet(`/relatedPaper/${paperId}`);
+}
+
 export {
     getAuthorById, getAuthorByName, getNameAndAliasByAuthorId, getTopAuthots, getAuthorFields, getAuthorCollaborators,
-    getPaperbyId, getPaperby, getPaperFields, getPaperAuthors, getPaperExternalIds, getTopPapers, getAverageTopPapers,
+    getPaperbyId, getPaperFields, getPaperAuthors, getPaperExternalIds, getTopPapers, getAverageTopPapers,
     getPaperbyJournal, getPaperByVenue, getTopJournal, getTopVenue, getFieldById, getFieldByName, getPaperOfField,
     getAuthorOfField, getTopAuthorOfField, getTopPaperOfField, getTopJornalOfField, getTopVenueOfField, 
-    getAverageCitationCountOfField,
+    getAverageCitationCountOfField, getAuthorPapers, getRelatedPaperByPaperId,
 }
