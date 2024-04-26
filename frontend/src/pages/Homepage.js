@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {Stack, Divider, Select, MenuItem} from '@mui/material';
 import {Link} from 'react-router-dom';
-
 import SearchBar from '../components/SearchBar';
 import { searchFunction } from '../utils/UtilFunctions';
 import RowTable from '../components/RowTable';
+import { Grid } from '@mui/material';
+
 
 function Homepage() {
     const [topPaper, setTopPaper] = useState([]);
@@ -24,7 +25,7 @@ function Homepage() {
             renderCell: (row) => <Link to={`/author/${row.authorId}`}>{row.authorName}</Link> // A Link component is used just for formatting purposes
         },
         {
-            field: 'ciation',
+            field: 'citation',
             headerName: 'Citation Count'
         },
         {
