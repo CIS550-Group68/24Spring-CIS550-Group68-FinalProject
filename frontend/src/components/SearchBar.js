@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import {TextField, Button, Box} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-function SearchBar( searchFunction ) {
+function SearchBar() {
     const [input, setInput] = useState('');
+
+
+    let navigate = useNavigate();
+
+    const searchFunction = () => {
+        navigate(`/search/${input}`);
+    }
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '0.8'}}>

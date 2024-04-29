@@ -3,7 +3,7 @@
     "rds_port": "3306",
     "rds_user": "songchx",
     "rds_password": "uqUY4TXXGMAD9bvCtCIM",
-    "rds_db": "COMPACT3",
+    "rds_db": "COMPACT5",
     "server_host": "localhost",
     "server_port": "9999"
 }
