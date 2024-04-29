@@ -59,7 +59,7 @@ function Homepage() {
 
     return (
         <Stack direction={'column'} spacing = {2} alignItems={'center'} justifyContent={'center'} marginTop={10}>
-            <SearchBar searchFunction={searchFunction}/>
+            <SearchBar/>
             <Divider />
             <Select value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
                 <MenuItem value="Computer Science">Computer Science</MenuItem>
