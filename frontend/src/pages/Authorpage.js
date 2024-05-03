@@ -93,13 +93,11 @@ function AuthorPage() {
             style={{ height: "150px", width: "auto" }}
           />
         </Grid>
-        <Grid item sx={{ marginRight: 2 }}></Grid>
         <Grid item sx={{ minWidth: "50%" }} marginTop={3} marginBottom={3}>
           <SearchBar />
         </Grid>
       </Grid>
       <Divider />
-
       <Stack direction="row" spacing={2}>
         {/* Author name and co-authors on the left hand side */}
         <Stack direction="column" spacing={2}>
@@ -121,13 +119,11 @@ function AuthorPage() {
         </Stack>
       </Stack>
       <Divider />
-      <Grid item>
-        <h2>Publications</h2>
-        <RowTable columnNames={publicationsColumns} data={publications} />
-        <Divider />
-        <h2>Co-Authors</h2>
-        <RowTable columnNames={coAuthorsColumns} data={coAuthors} />
-      </Grid>
+      <h2>Publications</h2>
+      <RowTable columnNames={publicationsColumns} data={publications} />
+      <Divider />
+      <h2>Co-Authors</h2>
+      <RowTable columnNames={coAuthorsColumns} data={coAuthors} />
     </Stack>
   );
 }
