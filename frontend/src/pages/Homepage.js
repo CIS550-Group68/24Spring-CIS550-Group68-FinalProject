@@ -21,40 +21,40 @@ function Homepage() {
     const topAuthorColumns = [
         {
             field: 'authorName',
-            headerName: 'Author Name',
+            headerName: 'Author Name',width: '25%',
             renderCell: (row) => <Link to={`/author/${row.authorId}`}>{row.authorName}</Link> // A Link component is used just for formatting purposes
         },
         {
             field: 'citation',
-            headerName: 'Citation Count'
+            headerName: 'Citation Count',width: '25%'
         },
         {
             field: 'hIndex',
-            headerName: 'H-Index'
+            headerName: 'H-Index',width: '25%'
         },
         {
             field: 'paperCount',
-            headerName: 'Paper Count'
+            headerName: 'Paper Count',width: '25%'
         }
     ];
 
     const topPaperColumns = [
         {
             field: 'title',
-            headerName: 'Title',
+            headerName: 'Title',width: '25%',
             renderCell: (row) => <Link to={`/paper/${row.paperId}`}>{row.title}</Link> // A Link component is used just for formatting purposes
         },
         {
             field: 'citation',
-            headerName: 'Citation Count'
+            headerName: 'Citation Count',width: '25%'// Add width to the columns, made sure each column header is aligned with the data
         },
         {
             field: 'year',
-            headerName: 'Year'
+            headerName: 'Year',width: '25%'
         },
         {
             field: 'field',
-            headerName: 'Field'
+            headerName: 'Field',width: '25%'
         }
     ];
 
