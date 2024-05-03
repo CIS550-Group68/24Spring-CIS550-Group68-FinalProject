@@ -5,7 +5,7 @@ import SearchBar from "../components/SearchBar";
 import { searchFunction } from "../utils/UtilFunctions";
 import RowTable from "../components/RowTable";
 import { Grid } from "@mui/material";
-import ResponsiveAppBar from "/Users/xiaoyingzhang/Desktop/24Spring-CIS550-Group68-FinalProject/frontend/src/pages/ResponsiveAppBar.js";
+import ResponsiveAppBar from "./ResponsiveAppBar.js";
 
 function Homepage() {
   const [topPaper, setTopPaper] = useState([]);
