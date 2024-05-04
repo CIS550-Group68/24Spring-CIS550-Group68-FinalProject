@@ -3,7 +3,7 @@ import {
 } from "./AxiosHelper";
 
 async function getAuthorById(authorId) {
-    return await axiosGet(`/author/${authorId}`);
+    return await axiosGet(`/authorById/${authorId}`);
 }
 
 async function getAuthorByName(authorName) {

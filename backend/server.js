@@ -15,8 +15,9 @@ app.use(
 // provide their handlers that we implemented in routes.js
 // app.get('/author/:type', routes.author);
 app.get("/author", routes.author);
-app.get("/authorPapers:/authorId", routes.authorPapers);
-app.get("/authorCollaborators:/authorId", routes.authorCollaborators);
+app.get("/authorById/:authorId", routes.authorById);
+app.get("/authorPapers/:authorId", routes.authorPapers);
+app.get("/authorCollaborators/:authorId", routes.authorCollaborators);
 app.get("/paper/:paperId", routes.paper);
 app.get("/relatedPaper/:paperId", routes.relatedPaper);
 app.get("/fieldTopAuthors", routes.topAuthors);
