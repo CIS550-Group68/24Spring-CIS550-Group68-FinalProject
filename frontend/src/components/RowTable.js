@@ -10,7 +10,7 @@ import {
 
 const defaultRenderCell = (col, row) => {
   return (
-    <div style={{ padding: "8px", textAlign: col.numeric ? "right" : "left" }}>
+    <div style={{ padding: "8px"}}>
       {row[col.field]}
     </div>
   );
@@ -47,7 +47,7 @@ function RowTable({ columnNames, data }) {
           {data.map((row, idx) => (
             <TableRow key={idx}>
               {columnNames.map((col) => (
-                <TableCell key={col.field} style={cellStyle}>
+                <TableCell key={col.field} style={{...cellStyle, width: "25%"}} >
                   {col.renderCell
                     ? col.renderCell(row)
                     : defaultRenderCell(col, row)}

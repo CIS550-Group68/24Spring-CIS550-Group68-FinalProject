@@ -6,38 +6,54 @@ import { searchFunction } from "../utils/UtilFunctions";
 import RowTable from "../components/RowTable";
 import { Grid } from "@mui/material";
 import ResponsiveAppBar from "./ResponsiveAppBar.js";
+import { getTopAuthorOfField, getTopPaperOfField, getRisingStarPapers } from "../api/API";
 
 function Homepage() {
   const [topPaper, setTopPaper] = useState([]);
   const [topAuthor, setTopAuthor] = useState([]);
+  const [risingStartPaper, setRisingStartPaper] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("Computer Science");
 
   // Create a use effect on the selectedSubject to fetch the top authors and top papers based on the selected subject
   useEffect(() => {
-    // TODO: fetch the top authors and top papers based on the selected subject
-  });
+    async function fetchTopContents() {
+        const topAuthors = await getTopAuthorOfField(10, selectedSubject);
+        setTopAuthor(topAuthors.data);
+        const topPapers = await getTopPaperOfField(10, selectedSubject);
+        const topPapersData = topPapers.data.map((paper) => {
+            return {
+                ...paper,
+                field: selectedSubject,
+            };
+        });
+        setTopPaper(topPapersData);
+        const risingStartPaper = await getRisingStarPapers(10, selectedSubject);
+        setRisingStartPaper(risingStartPaper.data);
+    }
+    fetchTopContents();
+  },[selectedSubject]);
 
   const topAuthorColumns = [
     {
-      field: "authorName",
+      field: "name",
       headerName: "Author Name",
       width: "25%",
       renderCell: (row) => (
-        <Link to={`/author/${row.authorId}`}>{row.authorName}</Link>
+        <Link to={`/author/${row.authorId}`}>{row.name}</Link>
       ), // A Link component is used just for formatting purposes
     },
     {
-      field: "citation",
+      field: "citation_count",
       headerName: "Citation Count",
       width: "25%",
     },
     {
-      field: "hIndex",
+      field: "h_index",
       headerName: "H-Index",
       width: "25%",
     },
     {
-      field: "paperCount",
+      field: "paper_count",
       headerName: "Paper Count",
       width: "25%",
     },
@@ -53,7 +69,7 @@ function Homepage() {
       ), // A Link component is used just for formatting purposes
     },
     {
-      field: "citation",
+      field: "citation_count",
       headerName: "Citation Count",
       width: "25%", // Add width to the columns, made sure each column header is aligned with the data
     },
@@ -65,6 +81,32 @@ function Homepage() {
     {
       field: "field",
       headerName: "Field",
+      width: "25%",
+    },
+  ];
+
+  const risingStarColumns = [
+    {
+      field: "title",
+      headerName: "Title",
+      width: "25%",
+      renderCell: (row) => (
+        <Link to={`/paper/${row.paperId}`}>{row.title}</Link>
+      ), // A Link component is used just for formatting purposes
+    },
+    {
+      field: "citation_count",
+      headerName: "Citation Count",
+      width: "25%", // Add width to the columns, made sure each column header is aligned with the data
+    },
+    {
+      field: "authors",
+      headerName: "Authors",
+      width: "25%",
+    },
+    {
+      field: "date",
+      headerName: "Publication Date",
       width: "25%",
     },
   ];
@@ -117,6 +159,11 @@ function Homepage() {
           Top Papers
         </h2>
         <RowTable columnNames={topPaperColumns} data={topPaper} />
+        <Divider />
+        <h2 style={{ width: "100%", textAlign: "left", marginLeft: "20px" }}>
+          Rising Stars in recent years
+        </h2>
+        <RowTable columnNames={risingStarColumns} data={topPaper} />
       </Stack>
     </>
   );

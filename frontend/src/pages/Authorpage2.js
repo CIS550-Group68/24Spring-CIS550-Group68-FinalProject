@@ -22,11 +22,11 @@ function Authorpage2() {
   useEffect(() => {
     async function fetchData() {
       const fetchedAuthor = await getAuthorById(authorId);
-      setAuthor(fetchedAuthor);
+      setAuthor(fetchedAuthor.data[0]);
       const fetchedPublications = await getAuthorPapers(authorId);
-      setPublications(fetchedPublications);
+      setPublications(fetchedPublications.data);
       const fetchedCoAuthors = await getAuthorCollaborators(authorId);
-      setCoAuthors(fetchedCoAuthors);
+      setCoAuthors(fetchedCoAuthors.data);
     }
     fetchData();
   }, [authorId]);
@@ -40,22 +40,22 @@ function Authorpage2() {
       ),
       width: "25%",
     },
-    { field: "citation", headerName: "Citation Count", width: "25%" },
+    { field: "citation_count", headerName: "Citation Count", width: "25%" },
     { field: "year", headerName: "Year", width: "25%" },
-    { field: "field", headerName: "Field", width: "25%" },
+    { field: "field_name", headerName: "Field", width: "25%" },
   ];
 
   const coAuthorsColumns = [
     {
-      field: "authorName",
+      field: "name",
       headerName: "Author Name",
       renderCell: (row) => (
-        <Link to={`/author/${row.authorId}`}>{row.authorName}</Link>
+        <Link to={`/authorById/${row.authorId}`}>{row.authorName}</Link>
       ),
     },
-    { field: "citation", headerName: "Citation Count", width: "25%" },
-    { field: "hIndex", headerName: "H-Index", width: "25%" },
-    { field: "paperCount", headerName: "Paper Count", width: "25%" },
+    { field: "citation_count", headerName: "Citation Count", width: "25%" },
+    { field: "h_index", headerName: "H-Index", width: "25%" },
+    { field: "paper_count", headerName: "Paper Count", width: "25%" },
   ];
 
   return (
@@ -84,7 +84,7 @@ function Authorpage2() {
                 image={authorImage}
                 alt="Descriptive Alt Text"
               />
-              <Typography variant="h4">{author.authorName}</Typography>
+              <Typography variant="h4">{author.name}</Typography>
               <Typography variant="body1">
                 Citation Count: {author.citation_count}
               </Typography>

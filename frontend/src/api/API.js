@@ -3,7 +3,7 @@ import {
 } from "./AxiosHelper";
 
 async function getAuthorById(authorId) {
-    return await axiosGet(`/author/${authorId}`);
+    return await axiosGet(`/authorById/${authorId}`);
 }
 
 async function getAuthorByName(authorName) {
@@ -91,12 +91,12 @@ async function getAuthorOfField(fieldId) {
     return await axiosGet(`/fieldAuthors/${fieldId}`);
 }
 
-async function getTopAuthorOfField(topN, fieldId, criterion) {
-    return await axiosGet(`/fieldTopAuthors`, { topN, field_id: fieldId, criterion });
+async function getTopAuthorOfField(topN, field_name, criterion) {
+    return await axiosGet(`/fieldTopAuthors`, { topN, filed_name: field_name, criterion });
 }
 
-async function getTopPaperOfField(topN, fieldId, criterion) {
-    return await axiosGet(`/fieldTopPapers`, { topN, field_id: fieldId, criterion });
+async function getTopPaperOfField(topN, field_name, criterion) {
+    return await axiosGet(`/fieldTopPapers`, { topN, field_name: field_name, criterion });
 }
 
 async function getTopJornalOfField(topN, fieldId, criterion) {
@@ -115,10 +115,14 @@ async function getRelatedPaperByPaperId(paperId) {
     return await axiosGet(`/relatedPaper/${paperId}`);
 }
 
+async function getRisingStarPapers(topN, field_name) {
+    return await axiosGet(`/risingStarPapers`, { field_name, topN });
+}
+
 export {
     getAuthorById, getAuthorByName, getNameAndAliasByAuthorId, getTopAuthots, getAuthorFields, getAuthorCollaborators,
     getPaperbyId, getPaperFields, getPaperAuthors, getPaperExternalIds, getTopPapers, getAverageTopPapers,
     getPaperbyJournal, getPaperByVenue, getTopJournal, getTopVenue, getFieldById, getFieldByName, getPaperOfField,
     getAuthorOfField, getTopAuthorOfField, getTopPaperOfField, getTopJornalOfField, getTopVenueOfField, 
-    getAverageCitationCountOfField, getAuthorPapers, getRelatedPaperByPaperId,
+    getAverageCitationCountOfField, getAuthorPapers, getRelatedPaperByPaperId, getRisingStarPapers,
 }
