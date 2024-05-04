@@ -36,7 +36,7 @@ function Authorpage2() {
       field: "title",
       headerName: "Title",
       renderCell: (row) => (
-        <Link to={`/paper/${row.paperId}`}>{row.title}</Link>
+        <Link to={`/paper/${row.paper_id}`}>{row.title}</Link>
       ),
       width: "25%",
     },
@@ -50,7 +50,7 @@ function Authorpage2() {
       field: "name",
       headerName: "Author Name",
       renderCell: (row) => (
-        <Link to={`/authorById/${row.authorId}`}>{row.authorName}</Link>
+        <Link to={`/authorById/${row.author_id}`}>{row.name}</Link>
       ),
     },
     { field: "citation_count", headerName: "Citation Count", width: "25%" },

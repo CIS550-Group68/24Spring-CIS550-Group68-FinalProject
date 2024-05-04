@@ -17,19 +17,30 @@ function Homepage() {
   // Create a use effect on the selectedSubject to fetch the top authors and top papers based on the selected subject
   useEffect(() => {
     async function fetchTopContents() {
-        const topAuthors = await getTopAuthorOfField(10, selectedSubject);
+        // Start all promises simultaneously
+        const [topAuthors, topPapers, risingStarPapers] = await Promise.all([
+            getTopAuthorOfField(10, selectedSubject),
+            getTopPaperOfField(10, selectedSubject),
+            getRisingStarPapers(10, selectedSubject)
+        ]);
+    
+        // Process each result as necessary
         setTopAuthor(topAuthors.data);
-        const topPapers = await getTopPaperOfField(10, selectedSubject);
-        const topPapersData = topPapers.data.map((paper) => {
-            return {
-                ...paper,
-                field: selectedSubject,
-            };
-        });
+    
+        const topPapersData = topPapers.data.map(paper => ({
+            ...paper,
+            field: selectedSubject
+        }));
         setTopPaper(topPapersData);
-        const risingStartPaper = await getRisingStarPapers(10, selectedSubject);
-        setRisingStartPaper(risingStartPaper.data);
-    }
+        
+        const risingStarPapersData = risingStarPapers.data.map(paper => ({
+            ...paper,
+            emerging_author_names: paper.emerging_author_names.length > 30 ? paper.emerging_author_names.slice(0, 15) + "..." : paper.emerging_author_names,
+            field: selectedSubject
+        }));
+    
+        setRisingStartPaper(risingStarPapersData);
+    }    
     fetchTopContents();
   },[selectedSubject]);
 
@@ -39,7 +50,7 @@ function Homepage() {
       headerName: "Author Name",
       width: "25%",
       renderCell: (row) => (
-        <Link to={`/author/${row.authorId}`}>{row.name}</Link>
+        <Link to={`/author/${row.author_id}`}>{row.name}</Link>
       ), // A Link component is used just for formatting purposes
     },
     {
@@ -65,7 +76,7 @@ function Homepage() {
       headerName: "Title",
       width: "25%",
       renderCell: (row) => (
-        <Link to={`/paper/${row.paperId}`}>{row.title}</Link>
+        <Link to={`/paper/${row.paper_id}`}>{row.title}</Link>
       ), // A Link component is used just for formatting purposes
     },
     {
@@ -91,7 +102,7 @@ function Homepage() {
       headerName: "Title",
       width: "25%",
       renderCell: (row) => (
-        <Link to={`/paper/${row.paperId}`}>{row.title}</Link>
+        <Link to={`/paper/${row.paper_id}`}>{row.title}</Link>
       ), // A Link component is used just for formatting purposes
     },
     {
@@ -100,12 +111,12 @@ function Homepage() {
       width: "25%", // Add width to the columns, made sure each column header is aligned with the data
     },
     {
-      field: "authors",
+      field: "emerging_author_names",
       headerName: "Authors",
       width: "25%",
     },
     {
-      field: "date",
+      field: "pub_date",
       headerName: "Publication Date",
       width: "25%",
     },
@@ -163,7 +174,7 @@ function Homepage() {
         <h2 style={{ width: "100%", textAlign: "left", marginLeft: "20px" }}>
           Rising Stars in recent years
         </h2>
-        <RowTable columnNames={risingStarColumns} data={topPaper} />
+        <RowTable columnNames={risingStarColumns} data={risingStartPaper} />
       </Stack>
     </>
   );
