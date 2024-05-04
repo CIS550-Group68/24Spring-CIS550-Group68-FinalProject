@@ -8,6 +8,7 @@ import SearchBar from "../components/SearchBar";
 import { Box } from "@mui/system";
 import loader from "../loader.gif";
 import { Typography } from "@mui/material";
+import { TablePagination } from "@mui/material";
 
 function Resultpage() {
   // Create a result page, use the Row table I defined to show the result of a author search result
@@ -15,7 +16,9 @@ function Resultpage() {
 
   const [authorResult, setAuthorResult] = useState([]);
   const [isLaoding, setIsLoading] = useState(true);
+
   let { authorSearchWord } = useParams();
+
   useEffect(() => {
     async function fetchAuthor() {
       const fetchedAuthor = await getAuthorByName(authorSearchWord);
@@ -23,7 +26,7 @@ function Resultpage() {
       setIsLoading(false);
     }
     fetchAuthor();
-  }, []);
+  }, [authorSearchWord]);
 
   const authorColumns = [
     {
@@ -86,7 +89,9 @@ function Resultpage() {
           About ? results for {authorSearchWord}
         </Typography> // Display loading message
       ) : (
-        <RowTable columnNames={authorColumns} data={authorResult} />
+        <>
+          <RowTable columnNames={authorColumns} data={authorResult} />
+        </>
       )}
     </div>
   );

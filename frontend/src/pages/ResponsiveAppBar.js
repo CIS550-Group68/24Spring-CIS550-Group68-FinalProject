@@ -114,9 +114,7 @@ function ResponsiveAppBar() {
               color: "#2563eb",
               textDecoration: "none",
             }}
-          >
-            //how to select a pic as Logo
-          </Typography>
+          ></Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button

@@ -119,7 +119,7 @@ function AuthorPage() {
         </Stack>
       </Stack>
       <Divider />
-      <h2>Publications</h2>
+      <h2>Selected Publications</h2>
       <RowTable columnNames={publicationsColumns} data={publications} />
       <Divider />
       <h2>Co-Authors</h2>

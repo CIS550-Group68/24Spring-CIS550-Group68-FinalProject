@@ -109,7 +109,7 @@ function Authorpage2() {
 
         {/* Right Column: Publications and Co-Authors */}
         <Grid item xs={12} md={8} paddingRight={10}>
-          <Typography variant="h5">Publications</Typography>
+          <Typography variant="h5">Selected Publications</Typography>
           <RowTable columnNames={publicationsColumns} data={publications} />
           <Divider />
           <Typography variant="h5">Co-Authors</Typography>
