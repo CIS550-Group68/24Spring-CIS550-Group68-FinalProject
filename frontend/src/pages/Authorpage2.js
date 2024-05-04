@@ -76,7 +76,7 @@ function Authorpage2() {
 
         {/* Left Column: Author Information */}
         <Grid item xs={12} md={4}>
-          <Card sx={{ maxWidth: 300, ml: 4, mb: 2, marginLeft: 50 }}>
+          <Card sx={{ maxWidth: 300, ml: 4, mb: 2, marginLeft: 20 }}>
             <CardContent sx={{ textAlign: "center" }}>
               <CardMedia
                 component="img"
