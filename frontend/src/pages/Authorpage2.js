@@ -4,7 +4,7 @@ import { Divider, Grid, Link, Typography } from "@mui/material";
 import SearchBar from "../components/SearchBar";
 import RowTable from "../components/RowTable";
 import { Card, CardContent, CardActions } from "@mui/material";
-import authorImage from "/Users/xiaoyingzhang/Desktop/24Spring-CIS550-Group68-FinalProject/frontend/src/authorImage.png";
+import authorImage from "../authorImage.png";
 import CardMedia from "@mui/material/CardMedia";
 
 import {
@@ -38,10 +38,11 @@ function Authorpage2() {
       renderCell: (row) => (
         <Link to={`/paper/${row.paperId}`}>{row.title}</Link>
       ),
+      width: "25%",
     },
-    { field: "citation", headerName: "Citation Count" },
-    { field: "year", headerName: "Year" },
-    { field: "field", headerName: "Field" },
+    { field: "citation", headerName: "Citation Count", width: "25%" },
+    { field: "year", headerName: "Year", width: "25%" },
+    { field: "field", headerName: "Field", width: "25%" },
   ];
 
   const coAuthorsColumns = [
@@ -52,9 +53,9 @@ function Authorpage2() {
         <Link to={`/author/${row.authorId}`}>{row.authorName}</Link>
       ),
     },
-    { field: "citation", headerName: "Citation Count" },
-    { field: "hIndex", headerName: "H-Index" },
-    { field: "paperCount", headerName: "Paper Count" },
+    { field: "citation", headerName: "Citation Count", width: "25%" },
+    { field: "hIndex", headerName: "H-Index", width: "25%" },
+    { field: "paperCount", headerName: "Paper Count", width: "25%" },
   ];
 
   return (
