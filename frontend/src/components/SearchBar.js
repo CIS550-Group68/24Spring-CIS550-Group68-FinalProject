@@ -8,7 +8,7 @@ function SearchBar() {
   let navigate = useNavigate();
 
   const searchFunction = () => {
-    navigate(`/search/${input}`);
+    navigate(`/search/${input ? input.toLowerCase() : ""}`);
   };
 
   return (

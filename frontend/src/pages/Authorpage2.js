@@ -7,6 +7,8 @@ import { Card, CardContent, CardActions } from "@mui/material";
 import authorImage from "../authorImage.png";
 import CardMedia from "@mui/material/CardMedia";
 import { Link } from "react-router-dom";
+import { Radar } from "react-chartjs-2";
+import { useRef } from "react";
 
 import {
   getAuthorById,
@@ -101,6 +103,7 @@ function Authorpage2() {
                 )}
               </>
             </CardContent>
+
             <CardActions sx={{ justifyContent: "center" }}>
               {coAuthors.map((coAuthor, index) => (
                 <Link

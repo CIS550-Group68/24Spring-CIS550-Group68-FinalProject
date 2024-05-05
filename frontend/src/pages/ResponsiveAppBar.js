@@ -15,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import logo2 from "../logo2.jpg";
 import { Link } from "react-router-dom";
 
-const pages = ["Papers", "Authors"];
+const pages = ["ScholarlyPenn", ""];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {

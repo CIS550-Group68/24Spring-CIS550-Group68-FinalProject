@@ -5,6 +5,7 @@ import SearchBar from "../components/SearchBar";
 import RowTable from "../components/RowTable";
 import { Grid } from "@mui/material";
 import ResponsiveAppBar from "./ResponsiveAppBar.js";
+import loader from "../loader.gif";
 import {
   getTopAuthorOfField,
   getTopPaperOfField,
@@ -16,10 +17,12 @@ function Homepage() {
   const [topAuthor, setTopAuthor] = useState([]);
   const [risingStartPaper, setRisingStartPaper] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("Computer Science");
+  const [isLoading, setIsLoading] = useState(true);
 
   // Create a use effect on the selectedSubject to fetch the top authors and top papers based on the selected subject
   useEffect(() => {
     async function fetchTopContents() {
+      setIsLoading(true);
       // Start all promises simultaneously
       const [topAuthors, topPapers, risingStarPapers] = await Promise.all([
         getTopAuthorOfField(10, selectedSubject),
@@ -46,6 +49,7 @@ function Homepage() {
       }));
 
       setRisingStartPaper(risingStarPapersData);
+      setIsLoading(false);
     }
     fetchTopContents();
   }, [selectedSubject]);
@@ -122,8 +126,8 @@ function Homepage() {
       width: "25%",
     },
     {
-      field: "pub_date",
-      headerName: "Publication Date",
+      field: "venue",
+      headerName: "Venue",
       width: "25%",
     },
   ];
@@ -173,28 +177,67 @@ function Homepage() {
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
           >
-            <MenuItem value="Computer Science">Select Category</MenuItem>
+            {/* <MenuItem value="Computer Science">Select Category</MenuItem>
             <MenuItem value="Physics">Physics</MenuItem>
             <MenuItem value="Mathematics">Mathematics</MenuItem>
             <MenuItem value="Biology">Biology</MenuItem>
+            <MenuItem value="Chemistry">Chemistry</MenuItem> */}
+            <MenuItem value="Sociology">Sociology</MenuItem>
+            <MenuItem value="Psychology">Psychology</MenuItem>
+            <MenuItem value="Political Science">Political Science</MenuItem>
+            <MenuItem value="Physics">Physics</MenuItem>
+            <MenuItem value="Philosophy">Philosophy</MenuItem>
+            <MenuItem value="Medicine">Medicine</MenuItem>
+            <MenuItem value="Mathematics">Mathematics</MenuItem>
+            <MenuItem value="Materials Science">Materials Science</MenuItem>
+            <MenuItem value="Linguistics">Linguistics</MenuItem>
+            <MenuItem value="Law">Law</MenuItem>
+            <MenuItem value="History">History</MenuItem>
+            <MenuItem value="Geology">Geology</MenuItem>
+            <MenuItem value="Geography">Geography</MenuItem>
+            <MenuItem value="Environmental Science">
+              Environmental Science
+            </MenuItem>
+            <MenuItem value="Engineering">Engineering</MenuItem>
+            <MenuItem value="Education">Education</MenuItem>
+            <MenuItem value="Economics">Economics</MenuItem>
+            <MenuItem value="Computer Science">Computer Science</MenuItem>
             <MenuItem value="Chemistry">Chemistry</MenuItem>
+            <MenuItem value="Business">Business</MenuItem>
+            <MenuItem value="Biology">Biology</MenuItem>
+            <MenuItem value="Art">Art</MenuItem>
+            <MenuItem value="Agricultural and Food Sciences">
+              Agricultural and Food Sciences
+            </MenuItem>
           </Select>
         </Grid>
+        {isLoading ? (
+          <img src={loader} alt="Loading..." />
+        ) : (
+          <>
+            <h2
+              style={{ width: "100%", textAlign: "left", marginLeft: "20px" }}
+            >
+              Top Authors
+            </h2>
+            <RowTable columnNames={topAuthorColumns} data={topAuthor} />
+            <Divider />
+            <h2
+              style={{ width: "100%", textAlign: "left", marginLeft: "20px" }}
+            >
+              Top Papers
+            </h2>
+            <RowTable columnNames={topPaperColumns} data={topPaper} />
+            <Divider />
+            <h2
+              style={{ width: "100%", textAlign: "left", marginLeft: "20px" }}
+            >
+              Papers by Rising Stars in recent years
+            </h2>
 
-        <h2 style={{ width: "100%", textAlign: "left", marginLeft: "20px" }}>
-          Top Authors
-        </h2>
-        <RowTable columnNames={topAuthorColumns} data={topAuthor} />
-        <Divider />
-        <h2 style={{ width: "100%", textAlign: "left", marginLeft: "20px" }}>
-          Top Papers
-        </h2>
-        <RowTable columnNames={topPaperColumns} data={topPaper} />
-        <Divider />
-        <h2 style={{ width: "100%", textAlign: "left", marginLeft: "20px" }}>
-          Rising Stars in recent years
-        </h2>
-        <RowTable columnNames={risingStarColumns} data={risingStartPaper} />
+            <RowTable columnNames={risingStarColumns} data={risingStartPaper} />
+          </>
+        )}
       </Stack>
     </>
   );
