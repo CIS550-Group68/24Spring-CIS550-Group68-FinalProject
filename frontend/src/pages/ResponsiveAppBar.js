@@ -12,6 +12,8 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import logo2 from "../logo2.jpg";
+import { Link } from "react-router-dom";
 
 const pages = ["Papers", "Authors"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -42,8 +44,8 @@ function ResponsiveAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to="http://localhost:3000/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -56,11 +58,7 @@ function ResponsiveAppBar() {
               marginBottom: "10px", // Adjust this value as needed
             }}
           >
-            <img
-              src="logo1.jpg"
-              alt=""
-              style={{ height: "80px", width: "auto" }}
-            />
+            <img src={logo2} alt="" style={{ height: "80px", width: "auto" }} />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

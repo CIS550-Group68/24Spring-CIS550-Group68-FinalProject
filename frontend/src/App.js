@@ -11,6 +11,7 @@ function App() {
   return (
     <div>
       <BrowserRouter>
+        <ResponsiveAppBar />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/paper/:paperId" element={<PaperPage />} />

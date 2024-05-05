@@ -4,7 +4,11 @@ import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
 import RowTable from "../components/RowTable";
-import { getPaperbyId, getPaperAuthors } from "../api/API";
+import {
+  getPaperbyId,
+  getPaperAuthors,
+  getRelatedPaperByPaperId,
+} from "../api/API";
 import { Card, CardContent, CardActions } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import { Typography } from "@mui/material";
@@ -22,7 +26,7 @@ function Paperpage() {
       setPaper(fetchedPaper.data[0]);
       const fetchedAuthor = await getPaperAuthors(paperId);
       setAuthors(fetchedAuthor.data);
-      const fetchedRelatedPapers = await getPaperbyId(paperId);
+      const fetchedRelatedPapers = await getRelatedPaperByPaperId(paperId);
       setRelatedPapers(fetchedRelatedPapers.data);
     }
     fetchData();
@@ -67,32 +71,42 @@ function Paperpage() {
 
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
-          <Card sx={{ maxWidth: 300, ml: 4, mb: 2, marginLeft: 50 }}>
+          <Card
+            sx={{ width: "40%", maxWidth: 500, ml: 4, mb: 2, marginLeft: 50 }}
+          >
             <CardContent sx={{ textAlign: "center" }}>
               <CardMedia
                 component="img"
-                sx={{ height: 150, width: "auto", margin: "auto" }}
+                sx={{
+                  height: 150,
+                  width: "auto",
+                  marginBottom: 2,
+                  marginLeft: 0,
+                  marginRight: 10,
+                }}
                 image={paperImage}
                 alt="Descriptive Alt Text"
               />
-              <Typography variant="h5" gutterBottom>
+              {/* <Typography variant="h5" gutterBottom>
                 title:{paper.title}
-              </Typography>
-              <Typography variant="body1">
+              </Typography> */}
+              <Typography variant="body1" sx={{ marginBottom: 1 }}>
                 Citation Count: {paper.citation_count}
               </Typography>
-              <Typography variant="body1">
+              <Typography variant="body1" sx={{ marginBottom: 1 }}>
                 Refenence Count: {paper.reference_count}
               </Typography>
-              <Typography variant="body1">
+              <Typography variant="body1" sx={{ marginBottom: 1 }}>
                 Influential Citation Count: {paper.influential_citation_count}
               </Typography>
-              <Typography variant="body1">Venue: {paper.venue}</Typography>
-              <Typography variant="body1">
-                Influential Citation Count: Journal: {paper.journal}
+              <Typography variant="body1" sx={{ marginBottom: 1 }}>
+                Venue: {paper.venue}
               </Typography>
-              <Typography variant="body1">
-                Publication Date: {paper.pub_date}
+              <Typography variant="body1" sx={{ marginBottom: 1 }}>
+                Journal: {paper.journal}
+              </Typography>
+              <Typography variant="body1" sx={{ marginBottom: 1 }}>
+                Publication Year: {paper.year}
               </Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "center" }}>
@@ -106,10 +120,26 @@ function Paperpage() {
         </Grid>
         {/* Paper Title and Abstract on the Right */}
         <Grid item xs={12} md={8}>
-          <Typography variant="h4" gutterBottom>
-            title:{paper.title}
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{ maxWidth: "50%", marginLeft: 10, marginRight: 10 }}
+          >
+            {paper.title}
           </Typography>
-          <Typography variant="subtitle1">abstract:{paper.abstract}</Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{ maxWidth: "50%", marginLeft: 10, fontSize: "1.2rem" }}
+          >
+            <span style={{ fontWeight: "bold" }}>Author:</span> {paper.author}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{ maxWidth: "50%", marginLeft: 10, fontSize: "1.2rem" }}
+          >
+            <span style={{ fontWeight: "bold" }}>Abstract:</span>{" "}
+            {paper.abstract}
+          </Typography>
         </Grid>
       </Grid>
 
@@ -119,7 +149,7 @@ function Paperpage() {
                 <div>{paper.abstract}</div>
             </Stack> 
             <Divider />*/}
-      <h1>Related Paper</h1>
+      <h1 style={{ marginLeft: "20px" }}>Related Paper</h1>
       <RowTable columnNames={relatedPaperColumns} data={relatedPapers} />
     </>
   );

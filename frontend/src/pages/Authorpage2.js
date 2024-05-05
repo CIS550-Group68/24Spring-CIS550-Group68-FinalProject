@@ -77,7 +77,7 @@ function Authorpage2() {
 
         {/* Left Column: Author Information */}
         <Grid item xs={12} md={4}>
-          <Card sx={{ maxWidth: 300, ml: 4, mb: 2, marginLeft: 20 }}>
+          <Card sx={{ maxWidth: 400, ml: 4, mb: 2, marginLeft: 20 }}>
             <CardContent sx={{ textAlign: "center" }}>
               <CardMedia
                 component="img"
@@ -93,6 +93,13 @@ function Authorpage2() {
                 Paper Count: {author.paper_count}
               </Typography>
               <Typography variant="body1">H-Index: {author.h_index}</Typography>
+              <>
+                {author.homepage && (
+                  <Typography variant="body1">
+                    <a href={author.homepage}>Homepage</a>
+                  </Typography>
+                )}
+              </>
             </CardContent>
             <CardActions sx={{ justifyContent: "center" }}>
               {coAuthors.map((coAuthor, index) => (

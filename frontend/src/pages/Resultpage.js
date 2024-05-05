@@ -83,7 +83,17 @@ function Resultpage() {
         </Grid>
       </Grid>
 
-      <div>About ? results for {authorSearchWord}</div>
+      <Typography
+        variant="body1"
+        sx={{
+          fontSize: "24px", // Adjust the font size as needed
+          fontWeight: "bold",
+          color: "#2563eb", // Change the color as needed
+          marginLeft: "20px", // Adjust the margin value as needed
+        }}
+      >
+        {authorResult.length} results for “"{authorSearchWord}"”
+      </Typography>
       {isLaoding ? (
         <Typography variant="body1" sx={{ fontSize: "20px" }}>
           About ? results for {authorSearchWord}

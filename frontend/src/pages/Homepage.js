@@ -5,7 +5,11 @@ import SearchBar from "../components/SearchBar";
 import RowTable from "../components/RowTable";
 import { Grid } from "@mui/material";
 import ResponsiveAppBar from "./ResponsiveAppBar.js";
-import { getTopAuthorOfField, getTopPaperOfField, getRisingStarPapers } from "../api/API";
+import {
+  getTopAuthorOfField,
+  getTopPaperOfField,
+  getRisingStarPapers,
+} from "../api/API";
 
 function Homepage() {
   const [topPaper, setTopPaper] = useState([]);
@@ -16,32 +20,35 @@ function Homepage() {
   // Create a use effect on the selectedSubject to fetch the top authors and top papers based on the selected subject
   useEffect(() => {
     async function fetchTopContents() {
-        // Start all promises simultaneously
-        const [topAuthors, topPapers, risingStarPapers] = await Promise.all([
-            getTopAuthorOfField(10, selectedSubject),
-            getTopPaperOfField(10, selectedSubject),
-            getRisingStarPapers(10, selectedSubject)
-        ]);
-    
-        // Process each result as necessary
-        setTopAuthor(topAuthors.data);
-    
-        const topPapersData = topPapers.data.map(paper => ({
-            ...paper,
-            field: selectedSubject
-        }));
-        setTopPaper(topPapersData);
-        
-        const risingStarPapersData = risingStarPapers.data.map(paper => ({
-            ...paper,
-            emerging_author_names: paper.emerging_author_names.length > 30 ? paper.emerging_author_names.slice(0, 15) + "..." : paper.emerging_author_names,
-            field: selectedSubject
-        }));
-    
-        setRisingStartPaper(risingStarPapersData);
-    }    
+      // Start all promises simultaneously
+      const [topAuthors, topPapers, risingStarPapers] = await Promise.all([
+        getTopAuthorOfField(10, selectedSubject),
+        getTopPaperOfField(10, selectedSubject),
+        getRisingStarPapers(10, selectedSubject),
+      ]);
+
+      // Process each result as necessary
+      setTopAuthor(topAuthors.data);
+
+      const topPapersData = topPapers.data.map((paper) => ({
+        ...paper,
+        field: selectedSubject,
+      }));
+      setTopPaper(topPapersData);
+
+      const risingStarPapersData = risingStarPapers.data.map((paper) => ({
+        ...paper,
+        emerging_author_names:
+          paper.emerging_author_names.length > 30
+            ? paper.emerging_author_names.slice(0, 15) + "..."
+            : paper.emerging_author_names,
+        field: selectedSubject,
+      }));
+
+      setRisingStartPaper(risingStarPapersData);
+    }
     fetchTopContents();
-  },[selectedSubject]);
+  }, [selectedSubject]);
 
   const topAuthorColumns = [
     {
@@ -123,7 +130,7 @@ function Homepage() {
 
   return (
     <>
-      <ResponsiveAppBar />
+      {/* <ResponsiveAppBar /> */}
       <Stack
         direction={"column"}
         spacing={2}
@@ -144,7 +151,7 @@ function Homepage() {
               style={{ height: "150px", width: "auto" }}
             />
           </Grid>
-          <Grid item sx={{ marginRight: 2 }}>
+          {/* <Grid item sx={{ marginRight: 2 }}>
             <Select
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
@@ -155,11 +162,25 @@ function Homepage() {
               <MenuItem value="Biology">Biology</MenuItem>
               <MenuItem value="Chemistry">Chemistry</MenuItem>
             </Select>
-          </Grid>
-          <Grid item sx={{ minWidth: "50%" }}>
+          </Grid> */}
+          <Grid item sx={{ minWidth: "70%" }}>
             <SearchBar />
           </Grid>
         </Grid>
+
+        <Grid item sx={{ marginRight: 2 }}>
+          <Select
+            value={selectedSubject}
+            onChange={(e) => setSelectedSubject(e.target.value)}
+          >
+            <MenuItem value="Computer Science">Select Category</MenuItem>
+            <MenuItem value="Physics">Physics</MenuItem>
+            <MenuItem value="Mathematics">Mathematics</MenuItem>
+            <MenuItem value="Biology">Biology</MenuItem>
+            <MenuItem value="Chemistry">Chemistry</MenuItem>
+          </Select>
+        </Grid>
+
         <h2 style={{ width: "100%", textAlign: "left", marginLeft: "20px" }}>
           Top Authors
         </h2>
