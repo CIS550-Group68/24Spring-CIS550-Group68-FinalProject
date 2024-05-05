@@ -52,12 +52,12 @@ function Authorpage2() {
       field: "name",
       headerName: "Author Name",
       renderCell: (row) => (
-        <Link to={`/authorById/${row.author_id}`}>{row.name}</Link>
+        <Link to={`/author/${row.author_id}`}>{row.name}</Link>
       ),
     },
     { field: "citation_count", headerName: "Citation Count", width: "25%" },
     { field: "h_index", headerName: "H-Index", width: "25%" },
-    { field: "paper_count", headerName: "Paper Count", width: "25%" },
+    { field: "collab_count", headerName: "Collab Count", width: "25%" },
   ];
 
   return (
