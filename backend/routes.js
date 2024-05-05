@@ -93,7 +93,7 @@ const authorPapers = async function (req, resp) {
             resp.status(500).send('Error');
         }
         connection.query(`
-            select distinct p.*, f.field_name
+            select distinct p.*
             from paper p
             join paper_author pa on p.paper_id = pa.paper_id
             join author a on pa.author_id = a.author_id
@@ -173,6 +173,36 @@ const paper = async function (req, resp) {
             connection.release();
         });
     });
+}
+
+const paperAuthors = async function (req, resp) {
+    const paperId = req.params.paperId;
+    if (!paperId || paperId.length === 0) {
+        resp.status(400).send('Paper ID cannot be empty');
+        return;
+    }
+    connectionPool.getConnection((err, connection) => {
+        if (err) {
+            console.log(err);
+            resp.status(500).send('Error');
+        }
+        connection.query(`
+        select author_id, name
+        from author
+            where author_id in
+            (select author_id from paper_author
+            where paper_id=${paperId})
+        `, (error, result) => {
+            if (error) {
+                console.log(error);
+                resp.status(500).send('Error');
+            } else {
+                resp.json(result);
+            }
+            connection.release();
+        });
+    });
+
 }
 
 const relatedPaper = async function (req, resp) {
@@ -333,5 +363,5 @@ const risingStartPapers = async function (req, resp) {
 }
 
 module.exports = {
-    author, authorPapers, authorCollaborators, paper, relatedPaper, topAuthors, topPapers, risingStartPapers, authorById
+    author, authorPapers, authorCollaborators, paper, relatedPaper, topAuthors, topPapers, risingStartPapers, authorById, paperAuthors
 }

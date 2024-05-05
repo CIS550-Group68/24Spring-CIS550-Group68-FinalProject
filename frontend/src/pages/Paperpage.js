@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { Divider, Stack } from "@mui/material";
 import SearchBar from "../components/SearchBar";
-import { searchFunction } from "../utils/UtilFunctions";
 import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
 import RowTable from "../components/RowTable";
@@ -21,11 +19,11 @@ function Paperpage() {
   useEffect(() => {
     async function fetchData() {
       const fetchedPaper = await getPaperbyId(paperId);
-      setPaper(fetchedPaper);
+      setPaper(fetchedPaper.data[0]);
       const fetchedAuthor = await getPaperAuthors(paperId);
-      setAuthors(fetchedAuthor);
+      setAuthors(fetchedAuthor.data);
       const fetchedRelatedPapers = await getPaperbyId(paperId);
-      setRelatedPapers(fetchedRelatedPapers);
+      setRelatedPapers(fetchedRelatedPapers.data);
     }
     fetchData();
   }, [paperId]);
@@ -35,11 +33,11 @@ function Paperpage() {
       field: "title",
       headerName: "Title",
       renderCell: (row) => (
-        <Link to={`/paper/${row.paperId}`}>{row.title}</Link>
-      ), // A Link component is used just for formatting purposes
+        <Link to={`/paper/${row.paper_id}`}>{row.title}</Link>
+      ),
     },
     {
-      field: "citation",
+      field: "citation_count",
       headerName: "Citation Count",
     },
     {
@@ -47,8 +45,8 @@ function Paperpage() {
       headerName: "Year",
     },
     {
-      field: "field",
-      headerName: "Field",
+      field: "venue",
+      headerName: "Venue",
     },
   ];
 

@@ -23,6 +23,7 @@ app.get("/relatedPaper/:paperId", routes.relatedPaper);
 app.get("/fieldTopAuthors", routes.topAuthors);
 app.get("/fieldTopPapers", routes.topPapers);
 app.get("/risingStarPapers", routes.risingStartPapers);
+app.get("/paperAuthors/:paperId", routes.paperAuthors);
 
 app.listen(config.server_port, () => {
   console.log(

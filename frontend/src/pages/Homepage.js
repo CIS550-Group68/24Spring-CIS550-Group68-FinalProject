@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Stack, Divider, Select, MenuItem } from "@mui/material";
 import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
-import { searchFunction } from "../utils/UtilFunctions";
 import RowTable from "../components/RowTable";
 import { Grid } from "@mui/material";
 import ResponsiveAppBar from "./ResponsiveAppBar.js";

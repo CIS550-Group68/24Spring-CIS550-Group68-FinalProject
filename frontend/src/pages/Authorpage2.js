@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { Divider, Grid, Link, Typography } from "@mui/material";
+import { Divider, Grid, Typography } from "@mui/material";
 import SearchBar from "../components/SearchBar";
 import RowTable from "../components/RowTable";
 import { Card, CardContent, CardActions } from "@mui/material";
 import authorImage from "../authorImage.png";
 import CardMedia from "@mui/material/CardMedia";
+import { Link } from "react-router-dom";
 
 import {
   getAuthorById,
@@ -42,7 +43,7 @@ function Authorpage2() {
     },
     { field: "citation_count", headerName: "Citation Count", width: "25%" },
     { field: "year", headerName: "Year", width: "25%" },
-    { field: "field_name", headerName: "Field", width: "25%" },
+    { field: "venue", headerName: "Venue", width: "25%" },
   ];
 
   const coAuthorsColumns = [
