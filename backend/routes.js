@@ -29,20 +29,10 @@ const author = async function (req, resp) {
             resp.status(500).send('Error');
         }
         connection.query(`
-            with temp as
-            (select a.author_id,field_name, count(distinct p.paper_id) paper_count from author_name_or_alias aa
-            join author a on aa.author_id = a.author_id
-            join paper_author pa on a.author_id = pa.author_id
-            join paper p on pa.paper_id = p.paper_id
-            join paper_field pf on p.paper_id = pf.paper_id
-            join field f on pf.field_id = f.field_id
-            where name_or_alias like '%${authorName.trim()}%'
-            group by a.author_id, field_name),
-            author_fields as (select max_field.author_id, GROUP_CONCAT(field_name ORDER BY field_name SEPARATOR ', ') AS fields from temp inner join
-            (select author_id, max(paper_count) max_count from temp group by author_id) max_field
-            on temp.author_id = max_field.author_id and temp.paper_count = max_field.max_count
-            group by max_field.author_id)
-            select author.*, author_fields.fields from author join author_fields on author_fields.author_id = author.author_id order by h_index desc limit 50
+        with temp as (select author_id, GROUP_CONCAT(field_name ORDER BY field_name SEPARATOR ', ') AS fields
+        from author_fields_sep_big where author_id in (select author_id from author_name_or_alias where name_or_alias like "%${authorName}%")
+        group by author_id)
+        select author.*,fields from author join temp on author.author_id = temp.author_id order by h_index desc limit 50
         `, (err, res) => {
             if (err) {
                 console.log(err);
@@ -93,12 +83,12 @@ const authorPapers = async function (req, resp) {
             resp.status(500).send('Error');
         }
         connection.query(`
-            select distinct p.*
-            from paper p
-            join paper_author pa on p.paper_id = pa.paper_id
-            join author a on pa.author_id = a.author_id
-            join paper_field pf on p.paper_id = pf.paper_id
-            join field f on pf.field_id = f.field_id
+        select distinct p.*
+        from paper p
+           join paper_author pa on p.paper_id = pa.paper_id
+           join author a on pa.author_id = a.author_id
+           join paper_field pf on p.paper_id = pf.paper_id
+           join field f on pf.field_id = f.field_id
             where a.author_id = ${authorId} order by pub_date desc
         `, ( error, result ) => {
             if (error) {
@@ -254,19 +244,9 @@ const topAuthors = async function (req, resp) {
             resp.status(500).send('Error');
         }
         connection.query(`
-            with temp as
-            (select a.author_id,field_name, count(distinct p.paper_id) paper_count from author a
-            join paper_author pa on a.author_id = pa.author_id
-            join paper p on pa.paper_id = p.paper_id
-            join paper_field pf on p.paper_id = pf.paper_id
-            join field f on pf.field_id = f.field_id
-            group by a.author_id,field_name),
-            author_fields as (select max_field.author_id, field_name from temp inner join
-            (select author_id, max(paper_count) max_count from temp group by author_id) max_field
-            on temp.author_id = max_field.author_id and temp.paper_count = max_field.max_count)
-            select * from author
-            where author_id in (select author_id from author_fields where field_name = "${filed_name}")
-            order by ${criterion} desc limit ${topN}
+        select * from author
+        where author_id in (select author_id from author_fields_sep_big where field_name = "${filed_name}")
+        order by ${criterion} desc limit ${topN}
         `, (error, result) => {
             if (error) {
                 console.log(error);
@@ -299,9 +279,19 @@ const topPapers = async function (req, resp) {
             resp.status(500).send('Error');
         }
         connection.query(`
-            select p.* from paper p join paper_field pf on p.paper_id = pf.paper_id
-            join field f on pf.field_id = f.field_id
-            where f.field_name = '${field_name}' order by ${criterion} desc limit ${topN}
+        with temp as (select author_id, name, h_index, paper_id, citation_count, title, pub_date, year, rank() OVER
+        (
+        PARTITION BY author_id
+        ORDER BY pub_date
+        ) as pub_order from paper_author_field_big
+        where field_name = "${field_name}"),
+        temp1 as (select paper_id, count(author_id) authors
+        from temp where year = 2023 group by paper_id),
+        temp2 as (select paper_id, count(author_id) emerging_authors, GROUP_CONCAT(name ORDER BY name SEPARATOR ', ') emerging_author_names
+        from temp where pub_order = 1 and year = 2023 group by paper_id)
+        
+        select temp2.paper_id, paper.title, emerging_author_names, paper.citation_count, paper.pub_date from temp2 join paper on temp2.paper_id = paper.paper_id where temp2.paper_id in (select temp2.paper_id paper_id from temp1 join temp2 on temp1.paper_id = temp2.paper_id
+        where emerging_authors/authors > 0.5) order by ${criterion} desc limit ${topN}
         `, (error, result) => {
             if (error) {
                 console.log(error);
@@ -326,30 +316,26 @@ const risingStartPapers = async function (req, resp) {
         resp.status(400).send('Field Name cannot be empty');
         return;
     }
+
     connectionPool.getConnection((err, connection) => {
         if (err) {
             console.log(err);
             resp.status(500).send('Error');
         }
         connection.query(`
-        with temp as (select a.author_id author_id, a.name name, a.h_index h_index, p.paper_id paper_id, p.citation_count citation_count, title, pub_date, year, rank() OVER
+        with temp as (select author_id, name, h_index, paper_id, citation_count, title, pub_date, year, rank() OVER
         (
-        PARTITION BY a.author_id
+        PARTITION BY author_id
         ORDER BY pub_date
-        ) as pub_order from paper p
-        join paper_field pf on p.paper_id = pf.paper_id
-        join field f on f.field_id = pf.field_id
-        join paper_author pa on pa.paper_id = p.paper_id
-        join author a on pa.author_id = a.author_id
-        where field_name = "Computer Science"),
+        ) as pub_order from paper_author_field_big
+        where field_name = "${field_name}"),
         temp1 as (select paper_id, count(author_id) authors
         from temp where year = 2023 group by paper_id),
         temp2 as (select paper_id, count(author_id) emerging_authors, GROUP_CONCAT(name ORDER BY name SEPARATOR ', ') emerging_author_names
         from temp where pub_order = 1 and year = 2023 group by paper_id)
-        
-        
+
         select temp2.paper_id, paper.title, emerging_author_names, paper.citation_count, paper.pub_date from temp2 join paper on temp2.paper_id = paper.paper_id where temp2.paper_id in (select temp2.paper_id paper_id from temp1 join temp2 on temp1.paper_id = temp2.paper_id
-        where emerging_authors/authors > 0.5) order by citation_count desc limit 10
+        where emerging_authors/authors > 0.5) order by citation_count desc limit ${topN}
         `, (error, result) => {
             if (error) {
                 console.log(error);
