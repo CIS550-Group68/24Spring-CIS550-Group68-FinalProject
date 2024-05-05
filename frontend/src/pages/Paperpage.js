@@ -9,7 +9,7 @@ import {
   getPaperAuthors,
   getRelatedPaperByPaperId,
 } from "../api/API";
-import { Card, CardContent, CardActions } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import { Typography } from "@mui/material";
 import paperImage from "../paperImage.png";
@@ -109,13 +109,6 @@ function Paperpage() {
                 Publication Year: {paper.year}
               </Typography>
             </CardContent>
-            <CardActions sx={{ justifyContent: "center" }}>
-              {authors.map((author) => (
-                <Link to={`/author/${author.authorId}`}>
-                  {author.authorName}
-                </Link>
-              ))}
-            </CardActions>
           </Card>
         </Grid>
         {/* Paper Title and Abstract on the Right */}
@@ -131,14 +124,21 @@ function Paperpage() {
             variant="subtitle1"
             sx={{ maxWidth: "50%", marginLeft: 10, fontSize: "1.2rem" }}
           >
-            <span style={{ fontWeight: "bold" }}>Author:</span> {paper.author}
+            <span style={{ fontWeight: "bold" }}>Author:</span> 
+            {authors.map((author) => {
+                return (
+                    <Link to={`/author/${author.author_id}`}>
+                        <span>{author.name+'.  '}</span>
+                    </Link>
+                );
+            })}
           </Typography>
           <Typography
             variant="subtitle1"
             sx={{ maxWidth: "50%", marginLeft: 10, fontSize: "1.2rem" }}
           >
             <span style={{ fontWeight: "bold" }}>Abstract:</span>{" "}
-            {paper.abstract}
+            {paper.abstract? paper.abstract: "No abstract available"}
           </Typography>
         </Grid>
       </Grid>

@@ -279,19 +279,9 @@ const topPapers = async function (req, resp) {
             resp.status(500).send('Error');
         }
         connection.query(`
-        with temp as (select author_id, name, h_index, paper_id, citation_count, title, pub_date, year, rank() OVER
-        (
-        PARTITION BY author_id
-        ORDER BY pub_date
-        ) as pub_order from paper_author_field_big
-        where field_name = "${field_name}"),
-        temp1 as (select paper_id, count(author_id) authors
-        from temp where year = 2023 group by paper_id),
-        temp2 as (select paper_id, count(author_id) emerging_authors, GROUP_CONCAT(name ORDER BY name SEPARATOR ', ') emerging_author_names
-        from temp where pub_order = 1 and year = 2023 group by paper_id)
-        
-        select temp2.paper_id, paper.title, emerging_author_names, paper.citation_count, paper.pub_date from temp2 join paper on temp2.paper_id = paper.paper_id where temp2.paper_id in (select temp2.paper_id paper_id from temp1 join temp2 on temp1.paper_id = temp2.paper_id
-        where emerging_authors/authors > 0.5) order by ${criterion} desc limit ${topN}
+        select p.* from paper p join paper_field pf on p.paper_id = pf.paper_id
+            join field f on pf.field_id = f.field_id
+            where f.field_name = '${field_name}' order by ${criterion} desc limit ${topN}
         `, (error, result) => {
             if (error) {
                 console.log(error);
